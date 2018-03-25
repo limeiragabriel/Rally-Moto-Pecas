@@ -1,0 +1,14 @@
+{% for field in form %}
+	<div class="row">
+		<span class="red-text">
+			{% if field.errors %}
+				Entrada inválida!
+			{% endif %}
+		</span>
+		<div class="input-field">
+			<div class="validate">{{ field }}</div>
+			<label class="active" for="{{ field.id }}">{{ field.label_tag }}</label>
+		</div>
+	</div>
+
+{% endfor %}

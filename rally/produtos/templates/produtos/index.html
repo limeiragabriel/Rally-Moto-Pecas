@@ -1,0 +1,107 @@
+{% extends 'produtos/base.html' %}
+{% block albums_active %}active{% endblock %}
+
+{% block body %}
+
+<!-- https://github.com/patrickhenrique/es2-20017.1/blob/implementação_da_interface_grafica/UfalAgenda/WebContent/home.jsp -->
+<div class="container">
+
+
+<div class="row">
+        <div class="row">
+            <blockquote><h5 class="light">{{ user.username }} - Produtos</h5></blockquote> 
+        </div>
+        {% if produtos %}
+            {% for produto in produtos %}
+                
+                <div class="col s8 m4" style="float: left;margin: 0px;">
+                    <div class="card large">
+                        <div class="card-image">
+                            <a href="{% url 'produtos:detail' produto.id %}">
+                                <img src="{{ produto.imagem.url }}">
+                            </a>
+                        </div>
+                        <div class="card-content grey-text text-darken-3">
+                            <span class="card-title black-text">{{ produto.nome }}</span>
+                            <h6>Valor: R${{ produto.valor }}</h6>
+                            <h6>Código: {{ produto.pk }}</h6>
+                            <h6>Estoque: {{ produto.estoque }}</h6>
+                        </div>
+                        <div class="card-action center">
+                            <a href="{% url 'produtos:detail' produto.id %}">Detalhes</a>
+
+                            <!--form action="{% url 'produtos:delete_produto' produto.id %}" method="post" style="display: inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="produto_id" value="{{ produto.id }}" />
+                                <button type="submit" class="waves-effect waves-red btn-flat">
+                                    Excluir
+                                </button>
+                            </form-->
+
+                        </div>
+                    </div>
+                </div>
+                    
+                {% cycle '' '' '' '' '' '<div class=""></div>' %}
+            {% endfor %}
+        {% else %}
+            <div class="col s12 m3">
+                <h5>Nenhum Produto Encontrado</h5>
+                <br>
+                <a href="{% url 'produtos:create_produto' %}">
+                    <a class="waves-effect waves-light btn">Cadastrar Produto</a>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+<!-- div class="albums-container container-fluid">
+
+    <div class="row">
+        <div class="col-sm-12">
+            <h3>{{ user.username }} - Produtos</h3>
+        </div>
+        {% if produtos %}
+            {% for produto in produtos %}
+                <div class="col-sm-4 col-lg-2">
+                    <div class="thumbnail">
+                        <a href="{% url 'produtos:detail' produto.id %}">
+                            <img src="{{ produto.imagem.url }}" class="img-responsive">
+                        </a>
+                        <div class="caption">
+                            <h2>{{ produto.nome }}</h2>
+                            <h4>{{ produto.preco }}</h4>
+
+                            <a href="{% url 'produtos:detail' produto.id %}" class="btn btn-primary btn-sm" role="button">Ver Detalhes</a>
+
+                            <form action="{% url 'produtos:delete_produto' produto.id %}" method="post" style="display: inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="produto_id" value="{{ produto.id }}" />
+                                <button type="submit" class="btn btn-default btn-sm">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+                {% cycle '' '' '' '' '' '<div class="clearfix visible-lg"></div>' %}
+            {% endfor %}
+        {% else %}
+            <div class="col-sm-12">
+                <br>
+                <a href="{% url 'produtos:create_produto' %}">
+                    <button type="button" class="btn btn-success">
+                        <span class="glyphicon glyphicon-plus"></span>&nbsp; Cadastrar Produto
+                    </button>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    
+
+</div -->
+
+</div>
+{% endblock %}

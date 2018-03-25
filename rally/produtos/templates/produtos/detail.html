@@ -1,0 +1,231 @@
+{% extends 'produtos/base.html' %}
+{% block title %}{{ produto }}{% endblock %}
+{% block albums_active %}active{% endblock %}
+
+{% block body %}
+
+<div class="container songs-container">
+
+    <div class="row">
+
+        <div class="col s4 m3">
+            <div class="card">
+                <div class="card-image" >
+                    <img src="{{ produto.imagem.url }}">
+                </div>
+
+                <div class="card-content grey-text text-darken-3">
+                    <span class="card-title black-text">{{ produto.nome }}</span>
+                    <!--h6>Valor: R${{ produto.preco }}</h6>
+                    <h6>Código: {{ produto.pk }}</h6>
+                    <h6>Estoque: {{ produto.estoque }}</h6-->
+                </div>
+                        
+                        <!--div class="card-action center">
+                            <a href="{% url 'produtos:detail' produto.id %}">Detalhes</a>
+
+                            <form action="{% url 'produtos:delete_produto' produto.id %}" method="post" style="display: inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="produto_id" value="{{ produto.id }}" />
+                                <button type="submit" class="waves-effect waves-red btn-flat">
+                                    Excluir
+                                </button>
+                            </form>
+
+                        </div-->
+                    
+            </div>
+        </div>
+
+        <div class="col s8 m9">
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <a class="btn waves-effect light" href="{% url 'produtos:produto-update' produto.id %}">Editar</a>
+                            <a class="btn waves-effect waves-red red modal-trigger light" data-target="modalExcluir" href="">Excluir</a>
+                            <!--form action="{% url 'produtos:delete_produto' produto.id %}" method="post" style="display: inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="produto_id" value="{{ produto.id }}" />
+                                <button type="submit" class="btn waves-effect red">
+                                    Excluir
+                                </button>
+                            </form-->
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>            
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="card">
+                <div class="card-content">
+
+                    <h4 class="light">Detalhes</h4>
+
+                    {% if error_message %}
+                        <p class="red white-text center"><strong>{{ error_message }}</strong></p>
+
+                    {% endif %}
+                    {% if succes_message %}
+                        <p class="green white-text center"><strong>{{ succes_message }}</strong></p>
+                    {% endif %}
+
+                    <table class="table light">
+                        <thead>
+                        <tr>
+                            <th>Valor</th>
+                            <th>Estoque</th>
+                            <th>Código</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-size: 28px">R${{ produto.valor }}</td>
+                                <td style="font-size: 28px">{{ produto.estoque }}</td>
+                                <td style="font-size: 28px">{{ produto.pk }}</td>
+                            </tr>
+
+                            <tr>
+                                <td><a class="btn waves-effect green modal-trigger" data-target="modalVender" href="">Vender</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Modal excluir -->
+<div id="modalExcluir" class="modal">
+    <div class="modal-content">
+        <h4>Excluir</h4>
+        <p>
+            Deseja realmente excluir o produto: <b class="blue-grey-text">{{ produto.nome }} - {{ produto.pk }}</b>?
+            Ao confirmar, esta ação não poderá ser desfeita.
+        </p>
+    </div>
+    <div class="modal-footer light">
+        <form action="{% url 'produtos:delete_produto' produto.id %}" method="post" style="display: inline;">
+            {% csrf_token %}
+            <input type="hidden" name="produto_id" value="{{ produto.id }}" />
+            <button type="submit" class="btn waves-effect">
+                Excluir
+            </button>
+        </form>
+
+        <a href="#!" class="modal-action modal-close waves-effect waves-red red btn">Cancelar</a>
+    </div>
+</div>
+
+<!-- Modal excluir -->
+<div id="modalVender" class="modal">
+    <div class="modal-content">
+        <h4>Vender Produto</h4>
+        <p>
+            Informe a quatidade da venda
+        </p>
+
+       <div class="row">
+           <form id="venda_form" role="form" action="{% url 'produtos:vender' produto.id %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="produto_id" value="{{ produto.id }}" />
+                <div class="form-group">
+                    <label class="active" for="id_qtd">
+                        Quantidade:
+                    </label>
+                    <div class="">
+                        <input id="id_qtd" maxlength="30" name="qtd" type="number">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="">
+                        <button type="submit" class="waves-effect waves-teal btn">Confirmar</button>
+                        <a href="#!" class="modal-action modal-close waves-effect waves-red red btn">Cancelar</a>
+                    </div>
+                </div>
+            </form>
+       </div>
+
+    </div>
+
+    <!--div class="modal-footer light">
+
+        <a href="#!" class="modal-action modal-close waves-effect waves-red red btn">Cancelar</a>
+    </div-->
+</div>
+
+<!-- div class="container-fluid songs-container">
+
+    <div class="row">
+
+        <div class="col-sm-4 col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <a href="{% url 'produtos:detail' produto.id %}">
+                        {% if produto.imagem %}
+                            <img src="{{ produto.imagem.url }}" class="img-responsive">
+                        {% else %}
+                            <h3>Sem Imagem Para Mostrar</h3>
+                        {% endif %}
+                    </a>
+                    <h1>{{ produto.nome }} <small>{{ produto.id }}</small></h1>
+                    <h2>{{ produto.preco }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-8 col-md-9">
+
+            <ul class="nav nav-pills" style="margin-bottom: 10px;">
+                <li role="presentation" class="active"><a href="{% url 'produtos:produto-update' produto.id %}">Editar</a></li>
+            </ul>
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+
+                    <h3>Detalhes</h3>
+
+                    {% if error_message %}
+                        <p><strong>{{ error_message }}</strong></p>
+                    {% endif %}
+
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Preço</th>
+                            <th>Estoque</th>
+                            <th>Ações</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div -->
+{% if succes_message %}
+    <script type="text/javascript">
+        document.getElementById("venda_form").reset();                    
+    </script>                
+{% endif %}
+
+
+
+{% endblock %}
